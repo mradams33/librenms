@@ -1011,7 +1011,7 @@ class Cisco extends OS implements
                 $isNative[$vlan_id][$ifindex] = 1;
             }
             // Determine if the port has a voice VLAN
-            print_r($data)
+            print_r($data);
             $voice_vlan = $data['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId'] ?? 0;
             if ($voice_vlan > 0 && $voice_vlan < 4095) {
                 $is_voice_vlan = 1;
