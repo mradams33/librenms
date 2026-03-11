@@ -1069,7 +1069,6 @@ class Cisco extends OS implements
                 foreach ($tmp_vlan_data as $baseport => $data) {
                     // use the collected untagged vlan info
                     $ifindex = $this->ifIndexFromBridgePort($baseport);
-                    $voice_vlan = $voice_vlans[$ifindex];
                     $alreadyProcessed[$vlan_id][$ifindex] = 1; // We don't want to override it later
                     $ports->push(new PortVlan([
                         'vlan' => $vlan_id,
