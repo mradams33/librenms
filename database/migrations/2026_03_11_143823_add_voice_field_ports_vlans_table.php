@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ports_vlans', function (Blueprint $table) {
+        Schema::table('ports_vlans', function (Blueprint $table) {
             $table->tinyinteger('voice')->default(0);
         });
     }
