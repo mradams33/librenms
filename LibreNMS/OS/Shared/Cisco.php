@@ -1012,12 +1012,12 @@ class Cisco extends OS implements
                 $isNative[$vlan_id][$ifindex] = 1;
             }
             // Determine if the port has a voice VLAN
-            $voice_vlan = $data['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId']
+            $voice_vlan = $data['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId'];
             if ($voice_vlan > 0 && $voice_vlan < 4095) {
-                $is_voice_vlan = 1
+                $is_voice_vlan = 1;
             } 
             else {
-                $is_voice_vlan = 0
+                $is_voice_vlan = 0;
             }
             if (isset($data['CISCO-VTP-MIB::vlanTrunkPortDynamicState']) && $data['CISCO-VTP-MIB::vlanTrunkPortDynamicState'] == 2) {
                 continue; // This port is not a trunk, so continue to next one
