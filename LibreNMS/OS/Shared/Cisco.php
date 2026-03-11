@@ -1072,10 +1072,10 @@ class Cisco extends OS implements
                 foreach ($tmp_vlan_data as $baseport => $data) {
                     // use the collected untagged vlan info
                     $ifindex = $this->ifIndexFromBridgePort($baseport);
-                    if(isset($voice_vlans[$ifindex])) {
-                        print_r($ifindex);
+                    if(isset($voice_vlans[$baseport])) {
+                        print_r($baseport);
                         echo '<br>';
-                        print_r($voice_vlans[$ifindex]);
+                        print_r($voice_vlans[$baseport]);
                     }
                     
                     // print_r($ifindex);
