@@ -1003,10 +1003,9 @@ class Cisco extends OS implements
             'CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId',
         ])->table(1);
         
-        $voice_vlans_smmp = SnmpQuery::abortOnFailure()->walk([
+        $voice_vlans = SnmpQuery::abortOnFailure()->walk([
             'CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId'
         ])->table(1);
-        $voice_vlans = []
 
         // Hash Table indexed by vlans and ifIndexes
         foreach ($native_vlans_raw as $ifindex => $data) {
@@ -1016,12 +1015,12 @@ class Cisco extends OS implements
             if ($vlan_id > 0) {
                 $isNative[$vlan_id][$ifindex] = 1;
             }
-            if (isset($voice_vlans_snmp[$ifindex])) {
-                if ($voice_vlans_snmp[$ifindex] > 0 and $voice_vlans_snmp[$ifindex] < 4095) {
-                    $voice_vlans_snmp[$ifindex]['is_voice_vlan'] = 1; 
+            if (isset($voice_vlans[$ifindex])) {
+                if ($voice_vlans[$ifindex] > 0 and $voice_vlans[$ifindex] < 4095) {
+                    $voice_vlans[$ifindex]['is_voice_vlan'] = 1; 
                 }
                 else {
-                    $voice_vlans_snmp[$ifindex]['is_voice_vlan'] = 0;
+                    $voice_vlans[$ifindex]['is_voice_vlan'] = 0;
                 }
                 print_r($voice_vlans[$ifindex]);
             }
