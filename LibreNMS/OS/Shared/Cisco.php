@@ -1106,8 +1106,6 @@ class Cisco extends OS implements
                         continue;
                     }
                     $ifindex = $this->ifIndexFromBridgePort($baseport);
-                    print_r($ifindex);
-                    print_r(' ');
                     $ports->push(new PortVlan([
                         'vlan' => $vlan_id,
                         'baseport' => $this->bridgePortFromIfIndex($ifindex),
@@ -1118,7 +1116,7 @@ class Cisco extends OS implements
                 }
             }
         }
-
+        print_r($ports);
         return $ports;
     }
 }
