@@ -1002,7 +1002,6 @@ class Cisco extends OS implements
             'CISCO-VLAN-MEMBERSHIP-MIB::vmVlan',
             'CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId',
         ])->table(1);
-
         // Hash Table indexed by vlans and ifIndexes
         foreach ($native_vlans_raw as $ifindex => $data) {
             // Only returns 'untagged' vlan for each port (either access ports, or native vlan of a trunk)
@@ -1012,7 +1011,8 @@ class Cisco extends OS implements
                 $isNative[$vlan_id][$ifindex] = 1;
             }
             // Determine if the port has a voice VLAN
-            $voice_vlan = $data['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId'];
+            print_r($data)
+            $voice_vlan = $data['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId'] ?? 0;
             if ($voice_vlan > 0 && $voice_vlan < 4095) {
                 $is_voice_vlan = 1;
             }
