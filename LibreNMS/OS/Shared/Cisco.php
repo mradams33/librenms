@@ -1005,6 +1005,8 @@ class Cisco extends OS implements
 
         // Hash Table indexed by vlans and ifIndexes
         foreach ($native_vlans_raw as $ifindex => $data) {
+            print_r($ifindex);
+            print_r(' ');
             // Only returns 'untagged' vlan for each port (either access ports, or native vlan of a trunk)
             // stored for use in below loop
             $vlan_id = $data['CISCO-VLAN-MEMBERSHIP-MIB::vmVlan'] ?? $data['CISCO-VTP-MIB::vlanTrunkPortNativeVlan'] ?? 0;
@@ -1072,10 +1074,12 @@ class Cisco extends OS implements
                 foreach ($tmp_vlan_data as $baseport => $data) {
                     // use the collected untagged vlan info
                     $ifindex = $this->ifIndexFromBridgePort($baseport);
-                    if(isset($voice_vlans[$baseport])) {
-                        print_r($baseport);
-                        echo '<br>';
-                        print_r($voice_vlans[$baseport]);
+                    $is_voice_vlan = 0;
+                    if(isset($voice_vlans[$ifindex])) {
+                        $voice_vlan = $voice_vlans[$ifindex];
+                        if ($voice_vlan > 0 && $voice_vlan < 4095) {
+                            $is_voice_vlan = 1;
+                        }
                     }
                     
                     // print_r($ifindex);
@@ -1085,7 +1089,7 @@ class Cisco extends OS implements
                     $alreadyProcessed[$vlan_id][$ifindex] = 1; // We don't want to override it later
                     $ports->push(new PortVlan([
                         'vlan' => $vlan_id,
-                        // 'voice'=> $is_voice_vlan,
+                        'voice'=> $is_voice_vlan,
                         'baseport' => $baseport,
                         'priority' => $data['BRIDGE-MIB::dot1dStpPortPriority'] ?? 0,
                         'state' => $data['BRIDGE-MIB::dot1dStpPortState'] ?? 'unknown',
