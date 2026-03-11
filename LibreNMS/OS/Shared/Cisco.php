@@ -1002,7 +1002,7 @@ class Cisco extends OS implements
             'CISCO-VLAN-MEMBERSHIP-MIB::vmVlan',
             'CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId',
         ])->table(1);
-        print_r($native_vlans_raw);
+        // print_r($native_vlans_raw);
         // Hash Table indexed by vlans and ifIndexes
         foreach ($native_vlans_raw as $ifindex => $data) {
             // Only returns 'untagged' vlan for each port (either access ports, or native vlan of a trunk)
@@ -1069,6 +1069,8 @@ class Cisco extends OS implements
                 foreach ($tmp_vlan_data as $baseport => $data) {
                     // use the collected untagged vlan info
                     $ifindex = $this->ifIndexFromBridgePort($baseport);
+                    print_r($ifIndex);
+                    print_r($baseport);
                     $alreadyProcessed[$vlan_id][$ifindex] = 1; // We don't want to override it later
                     $ports->push(new PortVlan([
                         'vlan' => $vlan_id,
