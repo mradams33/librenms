@@ -1044,7 +1044,7 @@ class Cisco extends OS implements
         $voice_vlans = SnmpQuery::abortOnFailure()->walk([
             'CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId'
         ])->table(1);
-        print_r($voice_vlans);
+        // print_r($voice_vlans[27]);
         // Determine if the port has a voice VLAN
         // $voice_vlan = $data['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId'] ?? 0;
         // if ($voice_vlan > 0 && $voice_vlan < 4095) {
@@ -1072,6 +1072,7 @@ class Cisco extends OS implements
                 foreach ($tmp_vlan_data as $baseport => $data) {
                     // use the collected untagged vlan info
                     $ifindex = $this->ifIndexFromBridgePort($baseport);
+                    print_r($voice_vlans[$ifindex]);
                     // print_r($ifindex);
                     // echo '<br/>';
                     // print_r($baseport);
