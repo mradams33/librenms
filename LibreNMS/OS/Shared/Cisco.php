@@ -1002,7 +1002,7 @@ class Cisco extends OS implements
             'CISCO-VLAN-MEMBERSHIP-MIB::vmVlan',
             'CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId',
         ])->table(1);
-        // print_r($native_vlans_raw);
+
         // Hash Table indexed by vlans and ifIndexes
         foreach ($native_vlans_raw as $ifindex => $data) {
             // Only returns 'untagged' vlan for each port (either access ports, or native vlan of a trunk)
@@ -1010,14 +1010,6 @@ class Cisco extends OS implements
             $vlan_id = $data['CISCO-VLAN-MEMBERSHIP-MIB::vmVlan'] ?? $data['CISCO-VTP-MIB::vlanTrunkPortNativeVlan'] ?? 0;
             if ($vlan_id > 0) {
                 $isNative[$vlan_id][$ifindex] = 1;
-            }
-            // Determine if the port has a voice VLAN
-            $voice_vlan = $data['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId'] ?? 0;
-            if ($voice_vlan > 0 && $voice_vlan < 4095) {
-                $is_voice_vlan = 1;
-            }
-            else {
-                $is_voice_vlan = 0;
             }
             if (isset($data['CISCO-VTP-MIB::vlanTrunkPortDynamicState']) && $data['CISCO-VTP-MIB::vlanTrunkPortDynamicState'] == 2) {
                 continue; // This port is not a trunk, so continue to next one
@@ -1049,7 +1041,18 @@ class Cisco extends OS implements
                 }
             }
         }
-
+        $voice_vlans = SnmpQuery::abortOnFailure()->walk([
+            'CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId'
+        ])->table(1);
+        print_r($voice_vlans);
+        // Determine if the port has a voice VLAN
+        // $voice_vlan = $data['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId'] ?? 0;
+        // if ($voice_vlan > 0 && $voice_vlan < 4095) {
+        //     $is_voice_vlan = 1;
+        // }
+        // else {
+        //     $is_voice_vlan = 0;
+        // }
         // process all the discovered vlans
         foreach ($vlans as $vlan) {
             $vlan_id = (int) $vlan->vlan_vlan;
@@ -1069,10 +1072,10 @@ class Cisco extends OS implements
                 foreach ($tmp_vlan_data as $baseport => $data) {
                     // use the collected untagged vlan info
                     $ifindex = $this->ifIndexFromBridgePort($baseport);
-                    print_r($ifindex);
-                    echo '<br/>';
-                    print_r($baseport);
-                    echo '<br/>';
+                    // print_r($ifindex);
+                    // echo '<br/>';
+                    // print_r($baseport);
+                    // echo '<br/>';
                     $alreadyProcessed[$vlan_id][$ifindex] = 1; // We don't want to override it later
                     $ports->push(new PortVlan([
                         'vlan' => $vlan_id,
