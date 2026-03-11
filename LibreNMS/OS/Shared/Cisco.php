@@ -996,10 +996,11 @@ class Cisco extends OS implements
         if ($ports->isNotEmpty()) {
             return $ports;
         }
-
+        
         $native_vlans_raw = SnmpQuery::abortOnFailure()->walk([
             'CISCO-VTP-MIB::vlanTrunkPortTable',
             'CISCO-VLAN-MEMBERSHIP-MIB::vmVlan',
+            'CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId',
         ])->table(1);
 
         // Hash Table indexed by vlans and ifIndexes
@@ -1009,6 +1010,14 @@ class Cisco extends OS implements
             $vlan_id = $data['CISCO-VLAN-MEMBERSHIP-MIB::vmVlan'] ?? $data['CISCO-VTP-MIB::vlanTrunkPortNativeVlan'] ?? 0;
             if ($vlan_id > 0) {
                 $isNative[$vlan_id][$ifindex] = 1;
+            }
+            // Determine if the port has a voice VLAN
+            $voice_vlan = $data['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId']
+            if ($voice_vlan > 0 && $voice_vlan < 4095) {
+                $is_voice_vlan = 1
+            } 
+            else {
+                $is_voice_vlan = 0
             }
             if (isset($data['CISCO-VTP-MIB::vlanTrunkPortDynamicState']) && $data['CISCO-VTP-MIB::vlanTrunkPortDynamicState'] == 2) {
                 continue; // This port is not a trunk, so continue to next one
@@ -1056,13 +1065,15 @@ class Cisco extends OS implements
                         'BRIDGE-MIB::dot1dStpPortPriority',
                         'BRIDGE-MIB::dot1dStpPortPathCost',
                     ])->table(1);
-
+        
                 foreach ($tmp_vlan_data as $baseport => $data) {
                     // use the collected untagged vlan info
                     $ifindex = $this->ifIndexFromBridgePort($baseport);
+                    $voice_vlan = $voice_vlans[$ifindex]
                     $alreadyProcessed[$vlan_id][$ifindex] = 1; // We don't want to override it later
                     $ports->push(new PortVlan([
                         'vlan' => $vlan_id,
+                        'voice':
                         'baseport' => $baseport,
                         'priority' => $data['BRIDGE-MIB::dot1dStpPortPriority'] ?? 0,
                         'state' => $data['BRIDGE-MIB::dot1dStpPortState'] ?? 'unknown',

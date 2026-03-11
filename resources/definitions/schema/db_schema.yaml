@@ -1932,6 +1932,7 @@ ports_vlans:
     - { Field: device_id, Type: 'int unsigned', 'Null': false, Extra: '' }
     - { Field: port_id, Type: 'int unsigned', 'Null': false, Extra: '', Default: '0' }
     - { Field: vlan, Type: 'int unsigned', 'Null': false, Extra: '', Default: '0' }
+    - { Field: voice, Type: 'tinyint', 'Null': false, Extra: '', Default: '0' }
     - { Field: baseport, Type: 'int unsigned', 'Null': false, Extra: '', Default: '0' }
     - { Field: priority, Type: 'bigint unsigned', 'Null': false, Extra: '', Default: '0' }
     - { Field: state, Type: varchar(16), 'Null': false, Extra: '', Default: unknown }
