@@ -1074,7 +1074,7 @@ class Cisco extends OS implements
                     $ifindex = $this->ifIndexFromBridgePort($baseport);
                     if(isset($voice_vlans[$ifindex])) {
                         print_r($ifindex);
-                        echp '<br>';
+                        echo '<br>';
                         print_r($voice_vlans[$ifindex]);
                     }
                     
