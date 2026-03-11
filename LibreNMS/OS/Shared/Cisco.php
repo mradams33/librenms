@@ -1016,7 +1016,7 @@ class Cisco extends OS implements
                 $isNative[$vlan_id][$ifindex] = 1;
             }
             if (isset($voice_vlans[$ifindex])) {
-                if ($voice_vlans[$ifindex] > 0 and $voice_vlans[$ifindex] < 4095) {
+                if ($voice_vlans[$ifindex] > 0 && $voice_vlans[$ifindex] < 4095) {
                     $voice_vlans[$ifindex]['is_voice_vlan'] = 1; 
                 }
                 else {
