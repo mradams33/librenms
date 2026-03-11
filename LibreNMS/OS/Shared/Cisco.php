@@ -1075,6 +1075,7 @@ class Cisco extends OS implements
                     $is_voice_vlan = 0;
                     if(isset($voice_vlans[$ifindex])) {
                         $voice_vlan = $voice_vlans[$ifindex];
+                        print_r($voice_vlan);
                         if ($voice_vlan > 0 && $voice_vlan < 4095) {
                             $is_voice_vlan = 1;
                         }
@@ -1116,7 +1117,7 @@ class Cisco extends OS implements
                 }
             }
         }
-        print_r($ports);
+
         return $ports;
     }
 }
