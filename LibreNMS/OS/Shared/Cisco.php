@@ -1015,6 +1015,7 @@ class Cisco extends OS implements
             if ($vlan_id > 0) {
                 $isNative[$vlan_id][$ifindex] = 1;
             }
+            // Determining if voice VLAN present on port
             if (isset($voice_vlans[$ifindex])) {
                 if ($voice_vlans[$ifindex]['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId'] > 0 && $voice_vlans[$ifindex]['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId'] < 4095) {
                     $voice_vlans[$ifindex]['is_voice_vlan'] = 1; 
@@ -1022,7 +1023,6 @@ class Cisco extends OS implements
                 else {
                     $voice_vlans[$ifindex]['is_voice_vlan'] = 0;
                 }
-                print_r($voice_vlans[$ifindex]);
             }
             if (isset($data['CISCO-VTP-MIB::vlanTrunkPortDynamicState']) && $data['CISCO-VTP-MIB::vlanTrunkPortDynamicState'] == 2) {
                 continue; // This port is not a trunk, so continue to next one
@@ -1055,15 +1055,6 @@ class Cisco extends OS implements
             }
         }
         
-        // print_r($voice_vlans[27]);
-        // Determine if the port has a voice VLAN
-        // $voice_vlan = $data['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId'] ?? 0;
-        // if ($voice_vlan > 0 && $voice_vlan < 4095) {
-        //     $is_voice_vlan = 1;
-        // }
-        // else {
-        //     $is_voice_vlan = 0;
-        // }
         // process all the discovered vlans
         foreach ($vlans as $vlan) {
             $vlan_id = (int) $vlan->vlan_vlan;
@@ -1091,11 +1082,6 @@ class Cisco extends OS implements
                             $is_voice_vlan = 1;
                         }
                     }
-                    
-                    // print_r($ifindex);
-                    // echo '<br/>';
-                    // print_r($baseport);
-                    // echo '<br/>';
                     $alreadyProcessed[$vlan_id][$ifindex] = 1; // We don't want to override it later
                     $ports->push(new PortVlan([
                         'vlan' => $vlan_id,
