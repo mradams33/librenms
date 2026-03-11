@@ -1002,6 +1002,10 @@ class Cisco extends OS implements
             'CISCO-VLAN-MEMBERSHIP-MIB::vmVlan',
             'CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId',
         ])->table(1);
+        
+        $voice_vlans = SnmpQuery::abortOnFailure()->walk([
+            'CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId'
+        ])->table(1);
 
         // Hash Table indexed by vlans and ifIndexes
         foreach ($native_vlans_raw as $ifindex => $data) {
@@ -1010,6 +1014,9 @@ class Cisco extends OS implements
             $vlan_id = $data['CISCO-VLAN-MEMBERSHIP-MIB::vmVlan'] ?? $data['CISCO-VTP-MIB::vlanTrunkPortNativeVlan'] ?? 0;
             if ($vlan_id > 0) {
                 $isNative[$vlan_id][$ifindex] = 1;
+            }
+            if (isset($voice_vlans[$ifindex])) {
+                print_r($voice_vlans[$ifindex]);
             }
             if (isset($data['CISCO-VTP-MIB::vlanTrunkPortDynamicState']) && $data['CISCO-VTP-MIB::vlanTrunkPortDynamicState'] == 2) {
                 continue; // This port is not a trunk, so continue to next one
@@ -1041,9 +1048,7 @@ class Cisco extends OS implements
                 }
             }
         }
-        $voice_vlans = SnmpQuery::abortOnFailure()->walk([
-            'CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId'
-        ])->table(1);
+        
         // print_r($voice_vlans[27]);
         // Determine if the port has a voice VLAN
         // $voice_vlan = $data['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId'] ?? 0;
@@ -1075,7 +1080,7 @@ class Cisco extends OS implements
                     $is_voice_vlan = 0;
                     if(isset($voice_vlans[$ifindex])) {
                         $voice_vlan = $voice_vlans[$ifindex];
-                        print_r($voice_vlan);
+                        // print_r($voice_vlan);
                         if ($voice_vlan > 0 && $voice_vlan < 4095) {
                             $is_voice_vlan = 1;
                         }
