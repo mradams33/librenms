@@ -1059,8 +1059,8 @@ class Cisco extends OS implements
         // process all the discovered vlans
         foreach ($vlans as $vlan) {
             $vlan_id = (int) $vlan->vlan_vlan;
-            print_r($ifindex);
-            echo "<br>";
+            // print_r($ifindex);
+            // echo "<br>";
 
             // Ignore reserved VLAN IDs
             if ($vlan->vlan_state && $vlan_id && ($vlan_id < 1002 || $vlan_id > 1005)) {
@@ -1077,18 +1077,17 @@ class Cisco extends OS implements
                 foreach ($tmp_vlan_data as $baseport => $data) {
                     // use the collected untagged vlan info
                     
-                    $is_voice_vlan = 0;
-                    if(isset($voice_vlans[$ifindex])) {
-                        $voice_vlan = $voice_vlans[$ifindex];
-                        // print_r($voice_vlan);
-                        if ($voice_vlan > 0 && $voice_vlan < 4095) {
-                            $is_voice_vlan = 1;
-                        }
-                    }
+                    // $is_voice_vlan = 0;
+                    // if(isset($voice_vlans[$ifindex])) {
+                    //     $voice_vlan = $voice_vlans[$ifindex];
+                    //     if ($voice_vlan > 0 && $voice_vlan < 4095) {
+                    //         $is_voice_vlan = 1;
+                    //     }
+                    // }
                     $alreadyProcessed[$vlan_id][$ifindex] = 1; // We don't want to override it later
                     $ports->push(new PortVlan([
                         'vlan' => $vlan_id,
-                        'voice'=> $voice_vlans[$ifindex]['voice_vlan'] ?? 0,
+                        // 'voice'=> $voice_vlans[$ifindex]['voice_vlan'] ?? 0,
                         'baseport' => $baseport,
                         'priority' => $data['BRIDGE-MIB::dot1dStpPortPriority'] ?? 0,
                         'state' => $data['BRIDGE-MIB::dot1dStpPortState'] ?? 'unknown',
