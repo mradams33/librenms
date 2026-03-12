@@ -75,8 +75,8 @@ class Cisco extends OS implements
     StpInstanceDiscovery,
     ProcessorDiscovery,
     QosDiscovery,
-    MacAccountingDiscovery,
-    MacAccountingPolling,
+    // MacAccountingDiscovery,
+    // MacAccountingPolling,
     MempoolsDiscovery,
     NacPolling,
     QosPolling,
@@ -1068,6 +1068,7 @@ class Cisco extends OS implements
                     $alreadyProcessed[$vlan_id][$ifindex] = 1; // We don't want to override it later
                     $ports->push(new PortVlan([
                         'vlan' => $vlan_id,
+                        'voice' => 0,
                         'baseport' => $baseport,
                         'priority' => $data['BRIDGE-MIB::dot1dStpPortPriority'] ?? 0,
                         'state' => $data['BRIDGE-MIB::dot1dStpPortState'] ?? 'unknown',
@@ -1087,6 +1088,7 @@ class Cisco extends OS implements
                     }
                     $ports->push(new PortVlan([
                         'vlan' => $vlan_id,
+                        'voice' => 0,
                         'baseport' => $this->bridgePortFromIfIndex($ifindex),
                         'untagged' => $value,
                         'state' => 'unknown',
