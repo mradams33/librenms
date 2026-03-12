@@ -1054,6 +1054,7 @@ class Cisco extends OS implements
                 }
             }
         }
+        var_dump($voice_vlans);
         
         // process all the discovered vlans
         foreach ($vlans as $vlan) {
@@ -1104,7 +1105,6 @@ class Cisco extends OS implements
                         continue;
                     }
                     $ifindex = $this->ifIndexFromBridgePort($baseport);
-                    print_r($voice_vlans[$ifindex]['voice_vlan']);
                     $ports->push(new PortVlan([
                         'vlan' => $vlan_id,
                         'baseport' => $this->bridgePortFromIfIndex($ifindex),
