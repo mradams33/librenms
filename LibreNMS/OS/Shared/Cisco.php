@@ -1076,6 +1076,8 @@ class Cisco extends OS implements
                             $is_voice_vlan = 1;
                         }
                         $voice_vlans[$ifindex]['voice'] = $is_voice_vlan;
+                        print_r($voice_vlan);
+                        echo ":"
                         print_r($voice_vlans[$ifindex]['voice']);
                     }
                     echo " ";
@@ -1107,6 +1109,8 @@ class Cisco extends OS implements
                             $is_voice_vlan = 1;
                         }
                         $voice_vlans[$ifindex]['voice'] = $is_voice_vlan;
+                        print_r($voice_vlan);
+                        echo ":"
                         print_r($voice_vlans[$ifindex]['voice']);
                     }
                     echo ", ";
