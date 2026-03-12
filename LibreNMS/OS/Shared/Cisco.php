@@ -1070,7 +1070,7 @@ class Cisco extends OS implements
                     // use the collected untagged vlan info
                     $ifindex = $this->ifIndexFromBridgePort($baseport);
                     if (isset($voice_vlans[$ifindex])) {
-                        print_r($voice_vlans[$ifIndex]);
+                        print_r($voice_vlans[$ifindex]);
                     }
                     echo " ";
                     $alreadyProcessed[$vlan_id][$ifindex] = 1; // We don't want to override it later
@@ -1095,7 +1095,7 @@ class Cisco extends OS implements
                         continue;
                     }
                     if (isset($voice_vlans[$ifindex])) {
-                        print_r($voice_vlans[$ifIndex]);
+                        print_r($voice_vlans[$ifindex]);
                     }
                     echo ", ";
                     $ports->push(new PortVlan([
