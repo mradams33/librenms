@@ -1075,16 +1075,16 @@ class Cisco extends OS implements
                         if ($voice_vlan > 0 && $voice_vlan < 4095) {
                             $is_voice_vlan = 1;
                         }
-                        $voice_vlans[$ifindex]['voice'] = $is_voice_vlan;
-                        print_r($voice_vlan);
-                        echo ":";
-                        print_r($voice_vlans[$ifindex]['voice']);
+                        // $voice_vlans[$ifindex]['voice'] = $is_voice_vlan;
+                        // print_r($voice_vlan);
+                        // echo ":";
+                        // print_r($voice_vlans[$ifindex]['voice']);
                     }
                     echo " ";
                     $alreadyProcessed[$vlan_id][$ifindex] = 1; // We don't want to override it later
                     $ports->push(new PortVlan([
                         'vlan' => $vlan_id,
-                        'voice' => 0,
+                        'voice' => $is_voice_vlan,
                         'baseport' => $baseport,
                         'priority' => $data['BRIDGE-MIB::dot1dStpPortPriority'] ?? 0,
                         'state' => $data['BRIDGE-MIB::dot1dStpPortState'] ?? 'unknown',
@@ -1108,15 +1108,15 @@ class Cisco extends OS implements
                         if ($voice_vlan > 0 && $voice_vlan < 4095) {
                             $is_voice_vlan = 1;
                         }
-                        $voice_vlans[$ifindex]['voice'] = $is_voice_vlan;
-                        print_r($voice_vlan);
-                        echo ":";
-                        print_r($voice_vlans[$ifindex]['voice']);
+                        // $voice_vlans[$ifindex]['voice'] = $is_voice_vlan;
+                        // print_r($voice_vlan);
+                        // echo ":";
+                        // print_r($voice_vlans[$ifindex]['voice']);
                     }
                     echo ", ";
                     $ports->push(new PortVlan([
                         'vlan' => $vlan_id,
-                        'voice' => 0,
+                        'voice' => $is_voice_vlan,
                         'baseport' => $this->bridgePortFromIfIndex($ifindex),
                         'untagged' => $value,
                         'state' => 'unknown',
