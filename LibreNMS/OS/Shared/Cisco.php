@@ -1054,11 +1054,13 @@ class Cisco extends OS implements
                 }
             }
         }
-        var_dump($voice_vlans);
+        // var_dump($voice_vlans);
         
         // process all the discovered vlans
         foreach ($vlans as $vlan) {
             $vlan_id = (int) $vlan->vlan_vlan;
+            print_r($ifindex);
+            echo "<br>";
 
             // Ignore reserved VLAN IDs
             if ($vlan->vlan_state && $vlan_id && ($vlan_id < 1002 || $vlan_id > 1005)) {
