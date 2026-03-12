@@ -1083,7 +1083,7 @@ class Cisco extends OS implements
                         }
                     }
                     $alreadyProcessed[$vlan_id][$ifindex] = 1; // We don't want to override it later
-                    print_r($voice_vlans[$ifindex]['voice_vlan'])
+                    print_r($voice_vlans[$ifindex]['voice_vlan']);
                     $ports->push(new PortVlan([
                         'vlan' => $vlan_id,
                         'voice'=> $voice_vlans[$ifindex]['voice_vlan'] ?? 0,
