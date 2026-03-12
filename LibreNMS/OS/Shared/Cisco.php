@@ -75,8 +75,8 @@ class Cisco extends OS implements
     StpInstanceDiscovery,
     ProcessorDiscovery,
     QosDiscovery,
-    // MacAccountingDiscovery,
-    // MacAccountingPolling,
+    MacAccountingDiscovery,
+    MacAccountingPolling,
     MempoolsDiscovery,
     NacPolling,
     QosPolling,
@@ -1069,16 +1069,15 @@ class Cisco extends OS implements
                 foreach ($tmp_vlan_data as $baseport => $data) {
                     // use the collected untagged vlan info
                     $ifindex = $this->ifIndexFromBridgePort($baseport);
+                    // Gathering voice VLAN info and determining if port has a voice VLAN configured.
                     if (isset($voice_vlans[$ifindex]['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId'])) {
                         $voice_vlan = $voice_vlans[$ifindex]['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId'];
-                        $is_voice_vlan = 0;
                         if ($voice_vlan > 0 && $voice_vlan < 4095) {
                             $is_voice_vlan = 1;
                         }
-                        // $voice_vlans[$ifindex]['voice'] = $is_voice_vlan;
-                        // print_r($voice_vlan);
-                        // echo ":";
-                        // print_r($voice_vlans[$ifindex]['voice']);
+                        else {
+                            $is_voice_vlan = 0;
+                        }
                     }
                     echo " ";
                     $alreadyProcessed[$vlan_id][$ifindex] = 1; // We don't want to override it later
@@ -1102,16 +1101,15 @@ class Cisco extends OS implements
                     if (isset($alreadyProcessed[$vlan_id][$ifindex])) {
                         continue;
                     }
+                    // Gathering voice VLAN info and determining if port has a voice VLAN configured.
                     if (isset($voice_vlans[$ifindex]['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId'])) {
                         $voice_vlan = $voice_vlans[$ifindex]['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId'];
-                        $is_voice_vlan = 0;
                         if ($voice_vlan > 0 && $voice_vlan < 4095) {
                             $is_voice_vlan = 1;
                         }
-                        // $voice_vlans[$ifindex]['voice'] = $is_voice_vlan;
-                        // print_r($voice_vlan);
-                        // echo ":";
-                        // print_r($voice_vlans[$ifindex]['voice']);
+                        else {
+                            $is_voice_vlan = 0;
+                        }
                     }
                     echo ", ";
                     $ports->push(new PortVlan([
