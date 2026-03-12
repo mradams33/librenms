@@ -1069,7 +1069,7 @@ class Cisco extends OS implements
                 foreach ($tmp_vlan_data as $baseport => $data) {
                     // use the collected untagged vlan info
                     $ifindex = $this->ifIndexFromBridgePort($baseport);
-                    if (isset($voice_vlans[$ifindex])) {
+                    if (isset($voice_vlans[$ifindex]['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId]'])) {
                         $voice_vlan = $voice_vlans[$ifindex]['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId]'];
                         $is_voice_vlan = 0;
                         if ($voice_vlan > 0 && $voice_vlan < 4095) {
@@ -1102,7 +1102,7 @@ class Cisco extends OS implements
                     if (isset($alreadyProcessed[$vlan_id][$ifindex])) {
                         continue;
                     }
-                    if (isset($voice_vlans[$ifindex])) {
+                    if (isset($voice_vlans[$ifindex]['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId]'])) {
                         $voice_vlan = $voice_vlans[$ifindex]['CISCO-VLAN-MEMBERSHIP-MIB::vmVoiceVlanId]'];
                         $is_voice_vlan = 0;
                         if ($voice_vlan > 0 && $voice_vlan < 4095) {
