@@ -768,6 +768,7 @@ class Cisco extends OS implements
                 'vendor' => $ent['entPhysicalMfgName'] ?? null,
                 'revision' => $ent['entPhysicalHardwareRev'] ?? null,
                 'model' => $ent['entPhysicalModelName'] ?? null,
+                'date' => $ent['entPhysicalMfgDate'] ?? null,
                 'serial' => $ent['entPhysicalSerialNum'] ?? null,
                 'entity_physical_index' => $ent['entPhysicalIndex'],
             ]);
@@ -1061,14 +1062,13 @@ class Cisco extends OS implements
 
             if ($vlan->vlan_state && $vlan_id) {
                 // collect BRIDGE-MIB in vlan context
-                $tmp_vlan_data = SnmpQuery::context($vlan_id === 1 ? '' : (string) $vlan_id, 'vlan-')
+                $vlanContext = $vlan_id == 1 ? '' : (string) $vlan_id;
+                $tmp_vlan_data = SnmpQuery::context($vlanContext, 'vlan-')
                     ->enumStrings()
                     ->abortOnFailure()
-                    ->walk([
-                        'BRIDGE-MIB::dot1dStpPortState',
-                        'BRIDGE-MIB::dot1dStpPortPriority',
-                        'BRIDGE-MIB::dot1dStpPortPathCost',
-                    ])->table(1);
+                    ->cache()
+                    ->walk('BRIDGE-MIB::dot1dStpPortTable')
+                    ->table(1);
 
                 foreach ($tmp_vlan_data as $baseport => $data) {
                     // use the collected untagged vlan info
