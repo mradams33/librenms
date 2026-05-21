@@ -1750,7 +1750,7 @@ function add_edit_rule(Illuminate\Http\Request $request)
 
     if (isset($data['builder'])) {
         // accept inline json or json as a string
-        $builder = is_array($data['builder']) ? json_encode($data['builder']) : $data['builder'];
+        $builder = is_array($data['builder']) ? $data['builder'] : json_decode((string) $data['builder'], true);
     } else {
         $builder = $data['rule'] ?? null;
     }
@@ -1792,7 +1792,6 @@ function add_edit_rule(Illuminate\Http\Request $request)
     if (array_key_exists('acknowledgement', $data)) {
         $extra['acknowledgement'] = filter_var($data['acknowledgement'], FILTER_VALIDATE_BOOLEAN);
     }
-    $extra_json = json_encode($extra);
 
     if ($override_query === 'on' || $override_query === true) {
         $query = $adv_query;
@@ -1870,7 +1869,7 @@ function add_edit_rule(Illuminate\Http\Request $request)
         'query' => $query,
         'severity' => $severity,
         'disabled' => $disabled,
-        'extra' => $extra_json,
+        'extra' => $extra,
         'notes' => $notes,
     ];
 
